@@ -26,15 +26,15 @@ n_allee = 2.
 m_allee = 4.
 tau_A = 45.
 d_J = 0.
-d_A = 0.45
+d_A = 0.5
 alpha = 1
 beta = 1
 init_A = 1.9
 
 ## define reproduction as a function of adult density
 def rep(x):
-    # return x/(1+x**m_allee) # dimensionless
-    return (alpha*x**n_allee)/(1+beta*x**m_allee)
+    #return (x**2)/(1+x**m_allee) # dimensionless
+    return ((alpha*x**(n_allee-1))/(1+(beta*x)**m_allee))*x
 
 ## define the set of equations
 def pop_grad(s,c,t):
