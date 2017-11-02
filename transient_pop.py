@@ -22,19 +22,19 @@ import numpy as np
 from matplotlib.pyplot import *
 
 ## set global parameter values
-n_allee = 2.
-m_allee = 4.
-tau_A = 45.
-d_J = 0.
+tau_A = 45
 d_A = 0.5
-alpha = 1
-beta = 1
-init_A = 1.9
+
+if d_A==0.45:
+    init_A = 3.2
+elif d_A==0.5:
+    init_A = 1.9
+
+g = float(d_A)
 
 ## define reproduction as a function of adult density
 def rep(x):
-    #return (x**2)/(1+x**m_allee) # dimensionless
-    return ((alpha*x**(n_allee-1))/(1+(beta*x)**m_allee))*x
+    return (x**2)/(1+x**4) # dimensionless
 
 ## define the set of equations
 def pop_grad(s,c,t):
@@ -43,14 +43,14 @@ def pop_grad(s,c,t):
     lag_A = float(init_A)
 
     ## retrive the density of adults tau_A time units ago
-    if t > tau_A:
+    if t >= tau_A:
         lag_A = pydde.pastvalue(0,t-tau_A,0)
 
     ## calculate adult recruitment as:
     ## product of reproduction and survivorship over the delay
-    R_A = rep(lag_A)*np.exp(-d_J*tau_A)
+    R_A = rep(lag_A)
     
-    dAdt = R_A - d_A*s[0] 
+    dAdt = R_A - g*s[0] 
     
     return np.array([dAdt])
 
