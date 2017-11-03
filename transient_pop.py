@@ -22,19 +22,28 @@ import numpy as np
 from matplotlib.pyplot import *
 
 ## set global parameter values
-tau_A = 45
-d_A = 0.5
+tau_A = 45.
+d_A = 0.45
+d_J = 0.
+beta = 1.
+n_allee = 2
+m_allee = 4
+alpha = 1.
 
 if d_A==0.45:
     init_A = 3.2
 elif d_A==0.5:
     init_A = 1.9
+else:
+    init_A = 2.5
 
-g = float(d_A)
+g = d_A*(beta**(1/m_allee))/(alpha*np.exp(-d_J*tau_A))
+#print(g)
 
 ## define reproduction as a function of adult density
 def rep(x):
-    return (x**2)/(1+x**4) # dimensionless
+    # is this beta term correct?
+    return x*(alpha*x**(n_allee-1))/(1+(beta*x)**m_allee) 
 
 ## define the set of equations
 def pop_grad(s,c,t):
@@ -48,9 +57,9 @@ def pop_grad(s,c,t):
 
     ## calculate adult recruitment as:
     ## product of reproduction and survivorship over the delay
-    R_A = rep(lag_A)
+    R_A = rep(lag_A)*np.exp(-d_J*tau_A)
     
-    dAdt = R_A - g*s[0] 
+    dAdt = R_A - d_A*s[0] 
     
     return np.array([dAdt])
 
@@ -62,7 +71,7 @@ dde_harvest.dde(y=init_cond, times=np.arange(0.,4000.,1.), func=pop_grad, tol=1e
 
 ## plot
 ion()
-plot(dde_harvest.data[:,0], dde_harvest.data[:,1],label=str(d_A))
+plot(dde_harvest.data[:,0], dde_harvest.data[:,1],label= str(g)[:6])
 legend(loc='best')
 xlabel('Time')
 ylabel('Density')
