@@ -3,7 +3,7 @@
 ## Code for long transient model as published in:
 ## Morozov, Banerjee, Petrovskii, 2016 in Journal of Theoretical Biology
 ## Created on 10/28/2017
-## Katherine Scranton kscranton@gmail.com
+## Katherine Scranton scranton.kt@gmail.com
 ##
 ## all parameters have names following the paper:
 ## alpha, n, m, beta control the density dependent growth with Allee effects
@@ -23,7 +23,7 @@ from matplotlib.pyplot import *
 
 ## set global parameter values
 tau_A = 45.
-d_A = 0.45
+d_A = 0.5
 d_J = 0.
 beta = 1.
 n_allee = 2
